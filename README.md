@@ -6,3 +6,10 @@
 * Spirale
 * Aggregation
 
+#Méthodes utilisées
+LDA (Analyse discriminante linéaire)
+KNN (K plus proches voisins)
+
+#Langage de test des méthodes
+R
+
