@@ -51,8 +51,11 @@ for (i in 1:10) {
 #Le meilleur K obtenu est 4 et avec 4NN on obtien une précision de 0.9 déjà meilleur que la LDA
 
 #Classificateur baysien naif
-
-
-
+library(e1071)
+#Création du modèle
+MBN_flame = naiveBayes(as.factor(train_flame_cla) ~ ., data = train_flame_var)
+flame_zp_MBN = predict(MBN_flame, test_flame_var) #Prédiction à l'aide du modèle pour le tester
+accurcy_MBN_flame = 1 - ( sum(flame_zp_MBN != test_flame_cla) / length(test_flame_cla) )
+#Et la on obtien un score de 55% mieux que la LDA mais bon pire que KNN
 
 
