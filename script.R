@@ -58,6 +58,15 @@ flame_zp_MBN = predict(MBN_flame, test_flame_var) #Prédiction à l'aide du mod�
 accurcy_MBN_flame = 1 - ( sum(flame_zp_MBN != test_flame_cla) / length(test_flame_cla) )
 #Et la on obtien un score de 55% mieux que la LDA mais bon pire que KNN
 
+#QDA
+flame_z_qda <- qda(train_flame_var, train_flame_cla) #Construction de discrimination quadratique
+flame_zp_qda <- predict(flame_z_qda,test_flame_var) #Prediction selon le modèle quadratique
+#Table de confusion
+table(test_flame_cla,flame_zp_qda$class) #Nous montre une précision moyenne
+#Précision que l'on calcule
+accurcy_qda_flame = 1 - ( sum(flame_zp_qda$class != test_flame_cla) / length(test_flame_cla) )
+#Contrairement à ce qu'on aurait pu penser la QDA ne donne pas de très bon résultats
+#Seulement 55% de précision (à égalité avec le NBM)
 
 ########## données spiral ##########
 #Lecture des données spiral
@@ -116,6 +125,16 @@ spiral_zp_MBN = predict(MBN_spiral, test_spiral_var) #Prédiction à l'aide du m
 accurcy_MBN_spiral = 1 - ( sum(spiral_zp_MBN != test_spiral_cla) / length(test_spiral_cla) )
 #Le classificateur baysien naif n'est même pas aussi bon que la LDA et a 36,36% de précision
 
+#QDA
+spiral_z_qda <- qda(train_spiral_var, train_spiral_cla) #Construction de discrimination quadratique
+spiral_zp_qda <- predict(spiral_z_qda,test_spiral_var) #Prediction selon le modèle quadratique
+#Table de confusion
+table(test_spiral_cla,spiral_zp_qda$class) #Nous montre une précision basse
+#Précision que l'on calcule
+accurcy_qda_spiral = 1 - ( sum(spiral_zp_qda$class != test_spiral_cla) / length(test_spiral_cla) )
+#Seulement 33% des données de test sont bien classées en se basant sur le modèle quadratique pour
+#ce type des données, et on s'y attendais un peu (moins bien que le modèle baysien) 
+
 
 ########## données Aggregation ##########
 #Lecture de données
@@ -169,3 +188,12 @@ MBN_aggregation = naiveBayes(as.factor(train_aggregation_cla) ~ ., data = train_
 aggregation_zp_MBN = predict(MBN_aggregation, test_aggregation_var) #Prédiction à l'aide du modèle pour le tester
 accurcy_MBN_aggregation = 1 - ( sum(aggregation_zp_MBN != test_aggregation_cla) / length(test_aggregation_cla) )
 #Le classificateur baysien est tout aussi bon que la LDA sur ces données : 98%
+
+#QDA
+aggregation_z_qda <- qda(train_aggregation_var, train_aggregation_cla) #Construction de discrimination quadratique
+aggregation_zp_qda <- predict(aggregation_z_qda,test_aggregation_var) #Prediction selon le modèle quadratique
+#Table de confusion
+table(test_aggregation_cla,aggregation_zp_qda$class) #Nous montre une précision très haute
+#Précision que l'on calcule
+accurcy_qda_aggregation = 1 - ( sum(aggregation_zp_qda$class != test_aggregation_cla) / length(test_aggregation_cla) )
+#Précision de 99% seul un élément a été mal classé par le modèle quadratique !
