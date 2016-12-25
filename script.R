@@ -58,6 +58,7 @@ flame_zp_MBN = predict(MBN_flame, test_flame_var) #Prédiction à l'aide du mod�
 accurcy_MBN_flame = 1 - ( sum(flame_zp_MBN != test_flame_cla) / length(test_flame_cla) )
 #Et la on obtien un score de 55% mieux que la LDA mais bon pire que KNN
 
+
 ########## données spiral ##########
 #Lecture des données spiral
 spiral = read.table('data/spiral.txt')
@@ -114,3 +115,27 @@ MBN_spiral = naiveBayes(as.factor(train_spiral_cla) ~ ., data = train_spiral_var
 spiral_zp_MBN = predict(MBN_spiral, test_spiral_var) #Prédiction à l'aide du modèle pour le tester
 accurcy_MBN_spiral = 1 - ( sum(spiral_zp_MBN != test_spiral_cla) / length(test_spiral_cla) )
 #Le classificateur baysien naif n'est même pas aussi bon que la LDA et a 36,36% de précision
+
+
+########## données Aggregation ##########
+#Lecture de données
+aggregation = read.table('data/Aggregation.txt')
+
+#Un scatter plot la encore pour voir les données
+plot(aggregation[,1:2],col = aggregation[,3])
+#Les classes sont éparpillées sur le plot, certaines sont bien séparées d'autres non
+#Certaines sont plus grandes que d'autres, on va bien voir
+
+#Séparation d'un ensemble de test et de train
+#Les classes 6 et 7 ne contiennent pas beaucoup d'individus (34 chacune)
+#Par peur de les vider plusieur essais de random sont fait
+random_aggregation = aggregation[sample(nrow(aggregation)),]
+#Séparation en variables et classes
+aggregation_var = random_aggregation[,1:2]
+aggregation_cla = random_aggregation[,3] #7classes
+#Séparation en ensemble de test et de train
+train_aggregation_var = aggregation_var[1:688,]
+train_aggregation_cla = aggregation_cla[1:688]
+test_aggregation_var = aggregation_var[689:788,]
+test_aggregation_cla = aggregation_cla[689:788]
+
