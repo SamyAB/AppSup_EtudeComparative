@@ -109,4 +109,8 @@ for (i in 1:10) {
 #On voit bien sur le scatter plot des données que le plus proche élément
 #a de trés forte chances d'appartenir à la même classe
 
-
+##Classificateur baysien naif
+MBN_spiral = naiveBayes(as.factor(train_spiral_cla) ~ ., data = train_spiral_var)
+spiral_zp_MBN = predict(MBN_spiral, test_spiral_var) #Prédiction à l'aide du modèle pour le tester
+accurcy_MBN_spiral = 1 - ( sum(spiral_zp_MBN != test_spiral_cla) / length(test_spiral_cla) )
+#Le classificateur baysien naif n'est même pas aussi bon que la LDA et a 36,36% de précision
