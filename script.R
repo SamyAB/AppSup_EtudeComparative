@@ -139,3 +139,11 @@ train_aggregation_cla = aggregation_cla[1:688]
 test_aggregation_var = aggregation_var[689:788,]
 test_aggregation_cla = aggregation_cla[689:788]
 
+#LDA
+aggregation_z_lda <- lda(train_aggregation_var, train_aggregation_cla) #Construction de discrimination linéaire
+aggregation_zp_lda <- predict(aggregation_z_lda,test_aggregation_var) #Prediction selon le modèle linéaire
+#Table de confusion
+table(test_aggregation_cla,aggregation_zp_lda$class) #Nous montre une précision très haute
+#Précision que l'on calcule
+accurcy_lda_aggregation = 1 - ( sum(aggregation_zp_lda$class != test_aggregation_cla) / length(test_aggregation_cla) )
+#Et on a un score magnifique de 98% !
