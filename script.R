@@ -147,3 +147,25 @@ table(test_aggregation_cla,aggregation_zp_lda$class) #Nous montre une précision
 #Précision que l'on calcule
 accurcy_lda_aggregation = 1 - ( sum(aggregation_zp_lda$class != test_aggregation_cla) / length(test_aggregation_cla) )
 #Et on a un score magnifique de 98% !
+
+#KNN
+#Boucle sur le K again
+best_k_aggregation = 0
+best_KNN_acc_aggregation = 0
+for (i in 1:10) {
+  aggregation_knn = knn(train_aggregation_var, test_aggregation_var, cl = train_aggregation_cla, k = i)
+  tmp_acc = 1 - ( sum(aggregation_knn != test_aggregation_cla) / length(test_aggregation_cla) )
+  if(tmp_acc > best_KNN_acc_aggregation){
+    best_KNN_acc_aggregation = tmp_acc
+    best_k_aggregation = i
+  }
+}
+#La encore KNN avec un seul voisin est excellent, et a un score de précision de 1
+#Mais je pense que l'ensemble de test ne contient pas d'éléments situés dans les frontières
+#des classes qui se chevauchent un peu
+
+#Classificateur Baysien naif
+MBN_aggregation = naiveBayes(as.factor(train_aggregation_cla) ~ ., data = train_aggregation_var)
+aggregation_zp_MBN = predict(MBN_aggregation, test_aggregation_var) #Prédiction à l'aide du modèle pour le tester
+accurcy_MBN_aggregation = 1 - ( sum(aggregation_zp_MBN != test_aggregation_cla) / length(test_aggregation_cla) )
+#Le classificateur baysien est tout aussi bon que la LDA sur ces données : 98%
