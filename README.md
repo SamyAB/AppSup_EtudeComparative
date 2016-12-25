@@ -9,6 +9,7 @@
 #Méthodes utilisées
 LDA (Analyse discriminante linéaire)
 KNN (K plus proches voisins)
+Classificateur Baysien naif
 
 #Langage de test des méthodes
 R

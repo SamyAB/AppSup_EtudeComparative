@@ -58,4 +58,55 @@ flame_zp_MBN = predict(MBN_flame, test_flame_var) #Prédiction à l'aide du mod�
 accurcy_MBN_flame = 1 - ( sum(flame_zp_MBN != test_flame_cla) / length(test_flame_cla) )
 #Et la on obtien un score de 55% mieux que la LDA mais bon pire que KNN
 
+########## données spiral ##########
+#Lecture des données spiral
+spiral = read.table('data/spiral.txt')
+
+#Séparation de la table en variables et classes
+spiral_var = spiral[,1:2]
+spiral_cla = spiral[,3] #Il y a trois classes
+
+#Dessin d'un nuage de points pour visualiser la structure de données
+plot(spiral_var, col = spiral_cla)
+#La forme bien que jolie des données n'est pas un cadeau pour les méthodes linéaires
+
+#Séparation en données de test et données de train
+#Pour prendre des éléments random on prend la matrice de base et on permute les lignes aléatoirement
+random_spiral = spiral[sample(nrow(spiral)),]
+#Puis on sépare ces données mélangés en classes et variables
+spiral_var = random_spiral[,1:2]
+spiral_cla = random_spiral[,3]
+
+#Puis finalement on séparre la partie test de la partie train
+train_spiral_var = spiral_var[1:280,] #Les premier 280 individus pour le train
+train_spiral_cla = spiral_cla[1:280]
+test_spiral_var  = spiral_var[280:312,] #les 32 autres indivdus pour le test
+test_spiral_cla  = spiral_cla[280:312]
+
+#LDA
+#Testons la LDA même si la séparation linéaire sur des données comme celles-ci ne vaut rien
+spiral_z_lda <- lda(train_spiral_var, train_spiral_cla) #Construction de discrimination linéaire
+spiral_zp_lda <- predict(spiral_z_lda,test_spiral_var) #Prediction selon le modèle linéaire
+#Table de confusion
+table(test_spiral_cla,spiral_zp_lda$class) #Nous montre une précision basse
+#Précision que l'on calcule
+accurcy_lda_spiral = 1 - ( sum(spiral_zp_lda$class != test_spiral_cla) / length(test_spiral_cla) )
+#On obtien donc 1/3 de précision, ça me surprend qu'il puisse trouver mieux que sur les donnés flame
+
+#KNN
+#La encore pas de K pré défini donc boucle de 1 à 10
+best_k_spiral = 0
+best_KNN_acc_spiral = 0
+for (i in 1:10) {
+  spiral_knn = knn(train_spiral_var, test_spiral_var, cl = train_spiral_cla, k = i)
+  tmp_acc = 1 - ( sum(spiral_knn != test_spiral_cla) / length(test_spiral_cla) )
+  if(tmp_acc > best_KNN_acc_spiral){
+    best_KNN_acc_spiral = tmp_acc
+    best_k_spiral = i
+  }
+}
+#KNN avec un seul voisin (k=1) s'en sort parfaitement et donne un précision de 1 !
+#On voit bien sur le scatter plot des données que le plus proche élément
+#a de trés forte chances d'appartenir à la même classe
+
 
