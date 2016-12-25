@@ -68,6 +68,15 @@ accurcy_qda_flame = 1 - ( sum(flame_zp_qda$class != test_flame_cla) / length(tes
 #Contrairement à ce qu'on aurait pu penser la QDA ne donne pas de très bon résultats
 #Seulement 55% de précision (à égalité avec le NBM)
 
+#SVM
+#Méthodes géniale, mais couteuse, et problème de choix de kernel donc pas de magie
+SVM_kernels = c("linear","polynomial","radial","sigmoid")
+#On utilise la fonction tune qui nous éstime les paramètre, pas besoin de trop coder (Merci monsieur Labiod)
+flame_tune_svm = tune(svm, train.x = train_flame_var, train.y = train_flame_cla, validation.x = test_flame_var, validation.y = test_flame_cla, ranges = list(kernel = SVM_kernels, cost = c(0.001, 0.01, 0.1, 1,5,10,100)))
+1 - flame_tune_svm$best.performance # précision du meilleur modèle
+flame_tune_svm$best.parameters #avec les meilleurs paramétres
+#On obient un taux de précision supérieur à 99.5% ! (Kernel gaussien radial, cout = 100)
+
 ########## données spiral ##########
 #Lecture des données spiral
 spiral = read.table('data/spiral.txt')
@@ -135,6 +144,13 @@ accurcy_qda_spiral = 1 - ( sum(spiral_zp_qda$class != test_spiral_cla) / length(
 #Seulement 33% des données de test sont bien classées en se basant sur le modèle quadratique pour
 #ce type des données, et on s'y attendais un peu (moins bien que le modèle baysien) 
 
+#SVM
+#Encore une fois pour estimer les paramètre (meilleur kernel,meilleur cout,résultats du meilleur modèle)
+#On utilise la fonction tune
+spiral_tune_svm = tune(svm, train.x = train_spiral_var, train.y = train_spiral_cla, validation.x = test_spiral_var, validation.y = test_spiral_cla, ranges = list(kernel = SVM_kernels, cost = c(0.001, 0.01, 0.1, 1,5,10,100)))
+1 - spiral_tune_svm$best.performance # précision du meilleur modèle
+spiral_tune_svm$best.parameters
+#La on une précision de plus de 98,5% ! (Kernel gaussien radial, cout = 100)
 
 ########## données Aggregation ##########
 #Lecture de données
@@ -197,3 +213,10 @@ table(test_aggregation_cla,aggregation_zp_qda$class) #Nous montre une précision
 #Précision que l'on calcule
 accurcy_qda_aggregation = 1 - ( sum(aggregation_zp_qda$class != test_aggregation_cla) / length(test_aggregation_cla) )
 #Précision de 99% seul un élément a été mal classé par le modèle quadratique !
+
+#SVM
+#Cela va prendre un peu de temps 
+aggregation_tune_svm = tune(svm, train.x = train_aggregation_var, train.y = train_aggregation_cla, validation.x = test_aggregation_var, validation.y = test_aggregation_cla, ranges = list(kernel = SVM_kernels, cost = c(0.001, 0.01, 0.1, 1,5,10,100)))
+1 - aggregation_tune_svm$best.performance # précision du meilleur modèle
+aggregation_tune_svm$best.parameters
+#Et la on n'a que 90% sur toujours un modèle radial !
