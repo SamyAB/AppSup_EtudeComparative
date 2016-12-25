@@ -7,10 +7,10 @@
 * Aggregation
 
 #Méthodes utilisées
-LDA (Analyse discriminante linéaire)
-KNN (K plus proches voisins)
-Classificateur Baysien naif
-QDA (Analyse discriminante quadratique)
+- LDA (Analyse discriminante linéaire)
+- KNN (K plus proches voisins)
+- Classificateur Baysien naif
+- QDA (Analyse discriminante quadratique)
 
 #Langage de test des méthodes
 R
